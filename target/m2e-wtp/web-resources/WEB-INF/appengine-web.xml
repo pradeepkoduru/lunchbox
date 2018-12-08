@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app
+	xmlns="http://appengine.google.com/ns/1.0">
+
+	<threadsafe>true</threadsafe>
+	<sessions-enabled>true</sessions-enabled>
+	<async-session-persistence enabled="true" />
+	<runtime>java8</runtime>
+<service>cloudsql</service>
+
+	<system-properties>
+		<property name="java.util.logging.config.file"
+			value="WEB-INF/logging.properties" />
+		<property name="cloudsql" value="jdbc:mysql://google/lunchbox?useSSL=false&amp;cloudSqlInstance=lunchbox-223320:us-east1:lunch-box1&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;user=applicationuser&amp;password=Msrp" />
+	</system-properties>
+	<env-variables>
+    <env-var name="TWILIO_ACCOUNT_SID" value="AC26361bfc9ae5fec983f9a72808825074" />
+    <env-var name="TWILIO_AUTH_TOKEN" value="da18c39889938cb6c67c8a42953e4baf" />
+    <env-var name="TWILIO_NUMBER" value="+15017084022" />
+  </env-variables>
+</appengine-web-app>
