@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
-
-import com.lunchbox.pojo.Address;
 import com.lunchbox.pojo.Order;
 import com.lunchbox.pojo.ShoppingCart;
 import com.lunchbox.pojo.Users;
 import com.lunchbox.service.OrderService;
+import com.lunchbox.util.AddressTypeEnum;
 import com.lunchbox.util.JSONUtil;
+import com.lunchbox.util.OrderStatusEnum;
 import com.lunchbox.util.RequestUtil;
 import com.stripe.Stripe;
 import com.stripe.model.Charge;
@@ -46,7 +46,7 @@ public class StripePaymentServlet extends HttpServlet {
 			 JSONObject user =(JSONObject)reqJSON.get("user");
 			 users.setFirstName(user.get("firstName").toString());
 			 users.setLastName(user.get("lastName").toString());
-			 users.setPhoneNumber((Long)user.get("phone"));
+			 users.setPhoneNumber(Long.valueOf("phone"));
 			 
 			 JSONObject address =(JSONObject)reqJSON.get("shippingAddress");
 			 String formatedAddress=address.get("formattedAddress").toString();
@@ -62,7 +62,7 @@ public class StripePaymentServlet extends HttpServlet {
 			 users.getShippingAddress().setState(stateZipArray[0]);
 			 users.getShippingAddress().setZipcode(Long.valueOf(stateZipArray[1]));
 			 users.getShippingAddress().setCountry(addressElementArray[3]);
-			 
+			 users.getShippingAddress().setAddressType(AddressTypeEnum.SHIPPINGADDRESS);
 			 
 	        try {
 	 
@@ -95,7 +95,7 @@ public class StripePaymentServlet extends HttpServlet {
 					order.setUsers(users);
 					order.setShippingAddress(users.getShippingAddress());
 					order.setChargeID(chargeID);
-					order.setOrderStatus("Pending");
+					order.setOrderStatus(OrderStatusEnum.RECEIVED);
 					order = orderService.insertOrder(order);
 					JSONObject productJSONObj = new JSONObject();
 					productJSONObj.put("orderNumber", order.getOrderNumber());

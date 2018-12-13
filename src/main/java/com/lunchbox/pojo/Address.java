@@ -3,13 +3,16 @@ package com.lunchbox.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 
+import com.lunchbox.util.AddressTypeEnum;
+
 
 
 public class Address implements Serializable{
 
 
 	private long addressID;
-	private String addressType;
+	private AddressTypeEnum addressType;
+	
 	private  String address1;
 	private String address2;
 	private String address3;
@@ -32,10 +35,10 @@ public class Address implements Serializable{
 	public void setAddressID(long addressID) {
 		this.addressID = addressID;
 	}
-	public String getAddressType() {
+	public AddressTypeEnum getAddressType() {
 		return addressType;
 	}
-	public void setAddressType(String addressType) {
+	public void setAddressType(AddressTypeEnum addressType) {
 		this.addressType = addressType;
 	}
 	

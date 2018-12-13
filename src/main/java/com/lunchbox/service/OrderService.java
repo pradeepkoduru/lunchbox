@@ -32,15 +32,18 @@ public Order insertOrder(Order order) throws SQLException {
 		conn.setAutoCommit(false);
 		
 		Address address=new Address();
-		address.setAddress1(order.getShippingAddress().getAddress1());
-		address.setAddress2(order.getShippingAddress().getAddress2());
-		address.setAddress3(order.getShippingAddress().getAddress3());
-		address.setCity(order.getShippingAddress().getCity());
-		address.setState(order.getShippingAddress().getState());
-		address.setCountry(order.getShippingAddress().getCountry());
-		address.setZipcode(order.getShippingAddress().getZipcode());
-		address.setAddressType(order.getShippingAddress().getAddressType());
+		address=order.getShippingAddress();
+		
 		stmt = conn.prepareStatement(sqlToInsertIntoAddress(address));
+		stmt.setString(1, address.getAddressType().toString());
+		stmt.setString(2, address.getAddress1());
+		stmt.setString(3, address.getAddress2());
+		stmt.setString(4, address.getAddress3());
+		stmt.setString(5, address.getCity());
+		stmt.setString(6, address.getState());
+		stmt.setString(7, address.getCountry());
+		stmt.setLong(8, address.getZipcode());
+		stmt.setDate(9, CommonUtil.getCurrentDateTime());
 		stmt.executeUpdate();
 		
 		ResultSet addressID = stmt.getGeneratedKeys();
@@ -48,6 +51,7 @@ public Order insertOrder(Order order) throws SQLException {
 		if (addressID.next()) {
 			order.setShippingAddressID( addressID.getLong(1));
 			order.getShippingAddress().setAddressID(addressID.getLong(1));
+			address.setAddressID(addressID.getLong(1));
 		}
 		stmt.close();
 		
@@ -57,17 +61,30 @@ public Order insertOrder(Order order) throws SQLException {
 		user.setPhoneNumber(order.getUsers().getPhoneNumber());
 		user.setCreatedDateTime(CommonUtil.getCurrentDateTime());
 		stmt = conn.prepareStatement(sqlToInsertIntoUsers(user));
+		stmt.setString(1, user.getFirstName());
+		stmt.setString(2, user.getLastName());
+		stmt.setLong(3, user.getPhoneNumber());
+		stmt.setLong(4, user.getShippingAddressID());		
+		stmt.setDate(5, CommonUtil.getCurrentDateTime());
+
 		stmt.executeUpdate();
 		ResultSet userId = stmt.getGeneratedKeys();
 
 		if (userId.next()) {
 			order.getUsers().setUserID(userId.getLong(1));
-		    
+			user.setUserID(userId.getLong(1));
+			
 		}
 		stmt.close();
 		
-		order.setCreatedDateTime(CommonUtil.getCurrentDateTime());
+		
 		stmt = conn.prepareStatement(sqlToInsertIntoOrders(order));
+		stmt.setLong(1, order.getUsers().getUserID());
+		stmt.setDouble(2, order.getShoppingCart().getTotal());
+		stmt.setLong(3, order.getShippingAddressID());
+		stmt.setString(4, order.getOrderStatus().toString());	
+		stmt.setString(5, order.getChargeID());
+		stmt.setDate(6, CommonUtil.getCurrentDateTime());
 		stmt.executeUpdate();
 		ResultSet orderNumber = stmt.getGeneratedKeys();
 
@@ -84,6 +101,11 @@ public Order insertOrder(Order order) throws SQLException {
 			orderItem.setQuantity(cartItem.getQty());
 			orderItem.setCreatedDateTime(CommonUtil.getCurrentDateTime());
 			stmt = conn.prepareStatement(sqlToInsertIntoOrderItem(orderItem));
+			
+			stmt.setLong(1, orderItem.getProductID());
+			stmt.setLong(2, orderItem.getQuantity());
+			stmt.setLong(3, order.getOrderNumber());				
+			stmt.setDate(4, CommonUtil.getCurrentDateTime());
 			stmt.executeUpdate();
 			stmt.close();
 		}
@@ -108,17 +130,12 @@ public Order insertOrder(Order order) throws SQLException {
 	
 	public String sqlToInsertIntoOrders(Order order) {
 	String sql=	"INSERT INTO Order( UserID, OrderCost,ShippingAddressID,OrderStatus,ChargeID,CreatedDateTime)" +
-                " VALUES" + "("+order.getUsers().getUserID()+
-                "," + order.getShoppingCart().getTotal()+","+order.getShippingAddressID()+","
-                +order.getOrderStatus()+","+order.getChargeID()+","
-                +order.getCreatedDateTime()+")";
+                " VALUES (?,?,?,?,?,?)" ;
 		return sql;
 	}
 	public String sqlToInsertIntoUsers(Users user) {
 		String sql=	"INSERT INTO Users( FirstName, LastName,PhoneNumber,ShippingAddressID, CreatedDateTime)" +
-	                " VALUES" + "("+user.getFirstName()+
-	                "," + user.getLastName()+","+user.getPhoneNumber()+","+user.getShippingAddressID()+
-	                ","+user.getCreatedDateTime()+")";
+	                " VALUES (?,?,?,?,?)";
 			return sql;
 	}
 	public String readUsersByPhoneNumber(long phoneNumber) {
@@ -127,21 +144,13 @@ public Order insertOrder(Order order) throws SQLException {
 	}
 	public String sqlToInsertIntoOrderItem(OrderItem orderItem) {
 		String sql=	"INSERT INTO OrderItem( ProductID, Quantity,OrderNumber,CreatedDateTime)" +
-	                " VALUES" + "("+
-	                "," +orderItem.getProductID()+
-	                "," + orderItem.getQuantity()+","+orderItem.getOrderNumber()+
-	                ","+orderItem.getCreatedDateTime()+")";
+	                " VALUES (?,?,?,?)" ;
 			return sql;
 		}
 	
 	public String sqlToInsertIntoAddress(Address address) {
 		String sql=	"INSERT INTO Address( AddressType,Address1, Address2,Address3,City,State,Country,Zipcode,CreatedDateTime)" +
-	                " VALUES" + "("+address.getAddressType()+
-	                ","+address.getAddress1()+
-	                "," + address.getAddress2()+","+address.getAddress3()+
-	                ","+address.getCity()+","+address.getState()+","+address.getCountry()+
-	                ","+address.getZipcode()+
-	                ","+address.getCreatedDateTime()+")";
+	                " VALUES (?,?,?,?,?,?,?,?,?)";
 			return sql;
 		}
 	

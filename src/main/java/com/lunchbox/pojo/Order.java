@@ -3,6 +3,8 @@ package com.lunchbox.pojo;
 import java.io.Serializable;
 import java.sql.Date;
 
+import com.lunchbox.util.OrderStatusEnum;
+
 
 
 public class Order implements Serializable{
@@ -13,7 +15,7 @@ public class Order implements Serializable{
 	private long orderNumber;
 	private long shippingAddressID;
 	private String chargeID;
-	private String orderStatus;
+	private OrderStatusEnum orderStatus;
 	private Date createdDateTime;
 	public Date getCreatedDateTime() {
 		return createdDateTime;
@@ -58,10 +60,10 @@ public class Order implements Serializable{
 	public void setChargeID(String chargeID) {
 		this.chargeID=chargeID;
 	}
-	public String getOrderStatus() {
+	public OrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
-	public void setOrderStatus(String orderStatus) {
+	public void setOrderStatus(OrderStatusEnum orderStatus) {
 		this.orderStatus=orderStatus;
 	}
 	
