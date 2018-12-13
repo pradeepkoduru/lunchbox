@@ -39,7 +39,7 @@ public class SendSmsServlet extends HttpServlet {
     List<NameValuePair> params = new ArrayList<NameValuePair>();
     params.add(new BasicNameValuePair("To", toNumber));
     params.add(new BasicNameValuePair("From", twilioNumber));
-    params.add(new BasicNameValuePair("Body", "Hey Praddep and madhav you idiots"));
+    params.add(new BasicNameValuePair("Body", "Hey Pradeep is very good person but I am idoit"));
     try {
       Message sms = messageFactory.create(params);
       resp.getWriter().print(sms.getBody());
