@@ -25,7 +25,7 @@ public class HelloAppEngine extends HttpServlet {
 
 String token=request.getHeader("x-auth-token");
 
-
+System.out.println("Test");
 	session=request.getSession(true);
 	tokenValue=session.getId();
 

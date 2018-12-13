@@ -1,0 +1,15 @@
+{{formattedShowAddress}}
+  <input ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)"/>
+  <button md-raised-button  (click)="onSearch()" class="mat-primary">Search</button>
+  <div  *ngIf="isAdressEntered" class="row">
+<div  *ngIf="isValidAddress" class="row">
+    <div class="col-md-9">
+        <h3><span  style="color:forestgreen"><i class="fa fa-check" style="color:forestgreen"></i>Adress is valid</span></h3>
+</div>
+</div>
+<div  *ngIf="!isValidAddress" class="row">
+    <div class="col-md-9">
+        <h3><span  style="color:red"><i class="fa fa-check" style="color:forestgreen"></i>Adress is not within our range</span></h3>
+</div>
+</div>
+</div>
