@@ -1,13 +1,13 @@
 package com.lunchbox.util;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 
 public class CommonUtil {
 	
-	public static Date getCurrentDateTime() {
+	public static Date  getCurrentDateTime() {
 		Calendar calender = Calendar.getInstance();
-		Date currentDate = (Date) calender.getTime();
+		Date currentDate =  calender.getTime();
 		return currentDate;
 		
 	}

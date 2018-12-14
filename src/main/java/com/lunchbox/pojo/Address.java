@@ -1,7 +1,7 @@
 package com.lunchbox.pojo;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import com.lunchbox.util.AddressTypeEnum;
 
