@@ -25,17 +25,17 @@ public class OrderService {
 @SuppressWarnings({ "null", "unused" })
 public Order insertOrder(Order order) throws SQLException, ClassNotFoundException {
 
-	Class.forName("com.mysql.jdbc.Driver");  
-	Connection conn=DriverManager.getConnection(  
-	"jdbc:mysql://localhost:3306/lunchbox","root","password"); 
-	//Connection conn = DataBaseConnection.getConnection();
+
+
+	Connection conn = DataBaseConnection.getConnection();
 	PreparedStatement stmt;
-	
+	System.out.println("After Connection");
 	try {
 		Users user =new Users();
 		java.sql.Date date=new java.sql.Date(CommonUtil.getCurrentDateTime().getTime());
+		System.out.println("Before Connection");
 		conn.setAutoCommit(false);
-		
+		System.out.println("After  Connection autocommit");
 		Address address=new Address();
 		address=order.getShippingAddress();
 		
@@ -49,6 +49,7 @@ public Order insertOrder(Order order) throws SQLException, ClassNotFoundExceptio
 		stmt.setString(7, address.getCountry());
 		stmt.setLong(8, address.getZipcode());
 		stmt.setDate(9,  date);
+		System.out.println("Before  Update for address");
 		stmt.executeUpdate();
 		
 		ResultSet addressID = stmt.getGeneratedKeys();
@@ -59,6 +60,7 @@ public Order insertOrder(Order order) throws SQLException, ClassNotFoundExceptio
 			address.setAddressID(addressID.getLong(1));
 			
 		}
+		System.out.println("Before  Statement close for address");
 		stmt.close();
 		
 		user.setFirstName(order.getUsers().getFirstName());
@@ -81,6 +83,7 @@ public Order insertOrder(Order order) throws SQLException, ClassNotFoundExceptio
 			user.setUserID(userId.getLong(1));
 			
 		}
+		System.out.println("Before  Statement close for address");
 		stmt.close();
 		
 		

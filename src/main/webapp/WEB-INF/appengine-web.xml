@@ -17,6 +17,6 @@
     <env-var name="TWILIO_ACCOUNT_SID" value="AC26361bfc9ae5fec983f9a72808825074" />
     <env-var name="TWILIO_AUTH_TOKEN" value="da18c39889938cb6c67c8a42953e4baf" />
     <env-var name="TWILIO_NUMBER" value="+15017084022" />
-    <env-var name="STRIPE_KEY" value="pk_test_RInXie0Z1yjLjBjKh01BnlbS" />
+    <env-var name="STRIPE_KEY" value="sk_test_evJNIxbfsoYSjvZOEOHv2TUP" />
   </env-variables>
 </appengine-web-app>

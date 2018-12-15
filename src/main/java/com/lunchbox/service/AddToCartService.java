@@ -60,6 +60,19 @@ public class AddToCartService {
 			session.setAttribute("shoppingCart", shoppingCart);
 
 		}
+		ProductService productService=new ProductService();
+		double cartTotal=0.00;
+		for(CartItem cartItemObj:shoppingCart.getCartItems())
+		{
+			if(productPriceMap.get(cartItemObj.getProductID())==null)
+			{
+			double price=	productService.getPriceOfProductID(cartItemObj.getProductID());
+					productPriceMap.put(cartItemObj.getProductID(), price);
+			}
+			
+			cartTotal=cartTotal+caluclateCartTotal(productPriceMap,cartItemObj);
+		}
+		shoppingCart.setTotal(cartTotal);
 		session.setAttribute("shoppingCart", shoppingCart);
 		
 		JSONObject json=getJSONObjectShoppingCart(shoppingCart,session.getId());
@@ -73,7 +86,7 @@ public class AddToCartService {
 	
 	public JSONObject removeCartItem(HttpSession session,JSONObject reqCartItem)
 	{
-		
+		Map<Long,Double> productPriceMap= new HashMap<Long,Double>();
 		CartItem cartItem = new CartItem();
 		long productID=0;
 		cartItem.setProductID((Long) reqCartItem.get("productID"));
@@ -93,7 +106,21 @@ public class AddToCartService {
 			}
 		
 		}
-
+		ProductService productService=new ProductService();
+		double cartTotal=0.00;
+		for(CartItem cartItemObj:shoppingCart.getCartItems())
+		{
+			if(productPriceMap.get(cartItemObj.getProductID())==null)
+			{
+			double price=	productService.getPriceOfProductID(cartItemObj.getProductID());
+					productPriceMap.put(cartItemObj.getProductID(), price);
+			}
+			
+			cartTotal=cartTotal+caluclateCartTotal(productPriceMap,cartItemObj);
+		}
+		shoppingCart.setTotal(cartTotal);
+		session.setAttribute("shoppingCart", shoppingCart);
+		
 		session.setAttribute("shoppingCart", shoppingCart);
 		JSONObject json=getJSONObjectShoppingCart(shoppingCart,session.getId());
 		
